@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:litz/Admin%20Pannel/Post.dart';
+import 'package:litz/Admin%20Pannel/post_2.dart';
+import 'package:litz/Admin%20Pannel/users.dart';
+import 'package:litz/Bottom%20Navigation/Navigation.dart';
+import 'package:litz/Homepage/home_2.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -37,41 +42,53 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Colors.white),
-              child: Row(
-                children: [
-                  Text(
-                    'LITZ',
-                    style: TextStyle(
-                      color: Colors.deepOrange,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Tech',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Text(
+                'Admin Panel',
+                style: TextStyle(color: Colors.white, fontSize: 24),
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
+              title: Text('Dashboard'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Navigation()),
+                );
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              title: Text('Post'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Post2()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Get msg'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home2()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Users'),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => AllUsersScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Logout'),
+              onTap: () {
+               
+                Navigator.of(context).pushReplacementNamed('/login'); // change to your login route
               },
             ),
           ],
@@ -116,7 +133,7 @@ class _HomeState extends State<Home> {
                   );
                 },
 
-                // Create a unique controller per StoryView instance
+                
               ),
             ),
             SizedBox(height: 2),

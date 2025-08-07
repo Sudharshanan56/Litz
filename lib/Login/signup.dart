@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:litz/Bottom%20Navigation/Navigation.dart';
@@ -19,55 +20,69 @@ class _SignupState extends State<Signup> {
     final TextEditingController passwordController = TextEditingController();
     String name = "", password = "", email = "";
     final _formkey = GlobalKey<FormState>();
+    
     registration() async {
-      if (password != null &&
-          usernameController.text.isNotEmpty &&
-          emailController.text.isNotEmpty) {
-        try {
-          UserCredential userCredential = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                email: emailController.text.trim(),
-                password: password!.trim(),
-              );
+  if (password != null &&
+      usernameController.text.isNotEmpty &&
+      emailController.text.isNotEmpty) {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: password!.trim(),
+      );
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "Registered Successfully",
-                style: TextStyle(fontSize: 20.0),
-              ),
+      // Get UID
+      String uid = userCredential.user!.uid;
+
+      // Create user document in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'uid': uid,
+        'username': usernameController.text.trim(),
+        'email': emailController.text.trim(),
+        'points': 0,
+        'createdAt': Timestamp.now(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Registered Successfully",
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ),
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Navigation()),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.orangeAccent,
+            content: Text(
+              "Password Provided is too Weak",
+              style: TextStyle(fontSize: 18.0),
             ),
-          );
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Navigation()),
-          );
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.orangeAccent,
-                content: Text(
-                  "Password Provided is too Weak",
-                  style: TextStyle(fontSize: 18.0),
-                ),
-              ),
-            );
-          } else if (e.code == 'email-already-in-use') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.orangeAccent,
-                content: Text(
-                  "Email Already Exists",
-                  style: TextStyle(fontSize: 18.0),
-                ),
-              ),
-            );
-          }
-        }
+          ),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.orangeAccent,
+            content: Text(
+              "Email Already Exists",
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+        );
       }
     }
+  }
+}
+
 
     return Scaffold(
       appBar: AppBar(
