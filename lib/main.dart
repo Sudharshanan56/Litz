@@ -6,6 +6,7 @@ import 'package:litz/Admin%20Pannel/HomePage.dart';
 import 'package:litz/Admin%20Pannel/points.dart';
 import 'package:litz/Admin%20Pannel/post_2.dart';
 import 'package:litz/Admin%20Pannel/users.dart';
+import 'package:litz/CRUD/Home.dart';
 import 'package:litz/Homepage/home_2.dart';
 import '../Incentive/Incentive.dart';
 import 'package:litz/Bottom%20Navigation/Navigation.dart';
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: splash(),
+      home: CrudScreen(),
     );
   }
 }
